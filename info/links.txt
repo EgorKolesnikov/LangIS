@@ -1,0 +1,101 @@
+openslr.org
+
+	1) A Free Chinese Speech Corpus
+	http://www.openslr.org/18/
+
+	2) A free Uyghur speech database
+	http://www.openslr.org/22/
+
+	3) ALFFA (African Languages in the Field: speech Fundamentals and Automation)
+	http://www.openslr.org/25/
+
+	4) Heroico, Spanish Data
+	http://www.openslr.org/39/
+
+	5) High quality TTS data for Bengali languages
+	http://www.openslr.org/37/
+
+	6) High quality TTS data for Javanese
+	http://www.openslr.org/41/
+
+	7) High quality TTS data for Khmer
+	http://www.openslr.org/42/
+
+	8) High quality TTS data for Nepali
+	http://www.openslr.org/43/
+
+	9) High quality TTS data for Sundanese
+	http://www.openslr.org/44/
+
+    10) Iban
+	http://www.openslr.org/24/
+
+    11) Large Javanese ASR training data set
+	http://www.openslr.org/35/
+
+	12) Large Sundanese ASR training data set
+	http://www.openslr.org/36/
+
+	13) South African languages (af, st, tn, xh)
+	http://www.openslr.org/32/
+
+	14) Sinhala TTS
+	http://www.openslr.org/30/
+
+	15) Tunisian_MSA
+	http://www.openslr.org/46/
+
+
+
+voxforge.org
+
+    1) Russian (Русский)
+    http://www.repository.voxforge1.org/downloads/Russian/Trunk/Audio/Original/48kHz_16bit/
+
+    2) bg (Болгарский)
+    http://www.repository.voxforge1.org/downloads/bg/Trunk/Audio/Original/48kHz_16bit/
+
+    3) ca (Каталанский)
+    http://www.repository.voxforge1.org/downloads/ca/Trunk/Audio/Original/48kHz_16bit/
+
+    4) de (Немецкий)
+    http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/Original/48kHz_16bit/
+
+    5) es (Испанский)
+    http://www.repository.voxforge1.org/downloads/es/Trunk/Audio/Original/48kHz_16bit/
+
+    6) fr (Французский)
+    http://www.repository.voxforge1.org/downloads/fr/Trunk/Audio/Original/48kHz_16bit/
+
+    7) hr (Хорватский)
+    http://www.repository.voxforge1.org/downloads/hr/Trunk/Audio/Original/48kHz_16bit/
+
+    8) it (Итальянский)
+    http://www.repository.voxforge1.org/downloads/it/Trunk/Audio/Original/48kHz_16bit/
+
+    9) pt (Португальский)
+    http://www.repository.voxforge1.org/downloads/pt/Trunk/Audio/Original/48kHz_16bit/
+
+    10) tr (Турецкий)
+    http://www.repository.voxforge1.org/downloads/tr/Trunk/Audio/Original/48kHz_16bit/
+
+    11) uk (Украинский)
+    http://www.repository.voxforge1.org/downloads/uk/Trunk/Audio/Original/48kHz_16bit/
+
+    12) el (Греческий)
+    http://www.repository.voxforge1.org/downloads/el/Trunk/Audio/Original/48kHz_16bit/
+
+    13) fa (Персидский)
+    http://www.repository.voxforge1.org/downloads/fa/Trunk/Audio/Original/48kHz_16bit/
+
+    14) he (Иврит)
+    http://www.repository.voxforge1.org/downloads/he/Trunk/Audio/Original/48kHz_16bit/
+
+    15) sq (Албанский)
+    http://www.repository.voxforge1.org/downloads/sq/Trunk/Audio/Original/48kHz_16bit/
+
+    16) zh (Китайский)
+    http://www.repository.voxforge1.org/downloads/zh/Trunk/Audio/Original/48kHz_16bit/
+
+    17) sq (Албанский)
+    http://www.repository.voxforge1.org/downloads/sq/Trunk/Audio/Original/48kHz_16bit/

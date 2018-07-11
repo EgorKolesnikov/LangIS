@@ -11,14 +11,15 @@ import urllib2
 
 
 # where to save different languages wav files
-LANGUAGES_WAV_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'wav')
+# LANGUAGES_WAV_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'wav')
+LANGUAGES_WAV_DIR = u'/home/kolegor/Study/Master/Work/data/voxforge/'
 
 
 # list of tuples(foxforge folder name, local folder name, ru alias)
 VOXFORGE_DIRECTORIES = [
     ('Russian', 'ru', u'Русский'),
     ('bg', 'bg', u'Болгарский'),
-    ('ca', 'ca', u'Канадский'),
+    ('ca', 'ca', u'Каталанский'),
     ('de', 'de', u'Немецкий'),
     ('es', 'es', u'Испанский'),
     ('fr', 'fr', u'Французский'),
@@ -26,13 +27,13 @@ VOXFORGE_DIRECTORIES = [
     ('it', 'it', u'Итальянский'),
     ('pt', 'pt', u'Португальский'),
     ('tr', 'tr', u'Турецкий'),
-    ('zh', 'zh', u'Русский'),
     ('uk', 'uk', u'Украинский'),
-
-    ('el', 'el', u'? Греческий'),
-    ('fa', 'fa', u'? Персидский'),
-    ('he', 'he', u'? Иврит'),
-    ('sq', 'sq', u'? Албанский'),
+    ('el', 'el', u'Греческий'),
+    ('fa', 'fa', u'Персидский'),
+    ('he', 'he', u'Иврит'),
+    ('sq', 'sq', u'Албанский'),
+    ('zh', 'zh', u'Китайский'),
+    ('sq', 'sq', u'Албанский'),
 ]
 
 
@@ -45,7 +46,7 @@ class VoxforgeCrawler(object):
         self.base_url = 'http://www.repository.voxforge1.org/downloads/'
         self.in_dir_path = '/Trunk/Audio/Original/48kHz_16bit/'
 
-        self.limit_language_total_files = 200
+        self.limit_language_total_files = 1000
 
     def get_files_names(self, page_url):
         """ Get list of files names in one language folder """
@@ -145,18 +146,21 @@ class VoxforgeCrawler(object):
         total_count = 0
 
         for idx_language, (dir_name, save_dir_name, language_name) in enumerate(VOXFORGE_DIRECTORIES):
-            url = self.base_url + dir_name + self.in_dir_path
-            print u'\n{}/{}. {:<20} {}'.format(idx_language + 1, len(VOXFORGE_DIRECTORIES), language_name, url)
+            try:
+                url = self.base_url + dir_name + self.in_dir_path
+                print u'\n{}/{}. {:<20} {}'.format(idx_language + 1, len(VOXFORGE_DIRECTORIES), language_name, url)
 
-            files_names = self.get_files_names(url)
-            print 'Found: {} packages'.format(len(files_names))
+                files_names = self.get_files_names(url)
+                print 'Found: {} packages'.format(len(files_names))
 
-            dir_to_save = os.path.join(LANGUAGES_WAV_DIR, save_dir_name)
-            loaded_count, loaded_size = self.save_files(url, files_names, dir_to_save)
-            print 'Packages loaded: {}. Total size: {} (MB)'.format(loaded_count, loaded_size / 1e6)
+                dir_to_save = os.path.join(LANGUAGES_WAV_DIR, save_dir_name)
+                loaded_count, loaded_size = self.save_files(url, files_names, dir_to_save)
+                print 'Packages loaded: {}. Total size: {} (MB)'.format(loaded_count, loaded_size / 1e6)
 
-            total_count += loaded_count
-            total_size += loaded_size
+                total_count += loaded_count
+                total_size += loaded_size
+            except Exception as e:
+                print 'Langiage {} skipped. Error: {}'.format(save_dir_name, repr(e))
 
         print 'Downloaded total: {} packages {} languages ({} MB)'.format(
             total_count,
