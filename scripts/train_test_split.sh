@@ -1,11 +1,11 @@
 # set -x
 
-DATA_PATH="../../../data/clean/"
+DATA_PATH="../../data/clean/"
 
 
 #
 #	Move wav files in one language directory into "./all/" folder
-#	(just a one-run function, really)
+#	(just a single-run function, really)
 #
 
 function language_move_to_all() {
@@ -35,12 +35,13 @@ function cleanup_links() {
 	fi
 }
 
+
 function create_links() {
 	cleanup_links "$1/train/"
 	cleanup_links "$1/test/"
 	cleanup_links "$1/dev/"
 
-	files_list=$(ls $1/all/ | shuf)
+	files_list=$(ls $1/all/)
 	count=$(ls $1/all/ | wc -l)
 	train_border=$(python -c "print int($count * 0.7)")
 	test_border=$(python -c "print int($count * 0.9)")
@@ -59,6 +60,7 @@ function create_links() {
 		IDX=$((IDX+1))
 	done
 }
+
 
 function split_train_test_dev() {
 	for folder in $(find $DATA_PATH -maxdepth 1 -mindepth 1 -type d)

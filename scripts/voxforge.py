@@ -17,14 +17,14 @@ LANGUAGES_WAV_DIR = u'/home/kolegor/Study/Master/Work/data/voxforge/'
 
 # list of tuples(foxforge folder name, local folder name, ru alias)
 VOXFORGE_DIRECTORIES = [
-    ('Russian', 'ru', u'Русский'),
-    ('bg', 'bg', u'Болгарский'),
-    ('ca', 'ca', u'Каталанский'),
-    ('de', 'de', u'Немецкий'),
-    ('es', 'es', u'Испанский'),
-    ('fr', 'fr', u'Французский'),
-    ('hr', 'hr', u'Хорватский'),
-    ('it', 'it', u'Итальянский'),
+    # ('Russian', 'ru', u'Русский'),
+    # ('bg', 'bg', u'Болгарский'),
+    # ('ca', 'ca', u'Каталанский'),
+    # ('de', 'de', u'Немецкий'),
+    # ('es', 'es', u'Испанский'),
+    # ('fr', 'fr', u'Французский'),
+    # ('hr', 'hr', u'Хорватский'),
+    # ('it', 'it', u'Итальянский'),
     ('pt', 'pt', u'Португальский'),
     ('tr', 'tr', u'Турецкий'),
     ('uk', 'uk', u'Украинский'),
