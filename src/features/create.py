@@ -86,28 +86,17 @@ def bulk_create(languages, datasets, feature_handler, processes=4):
         proc.join()
 
 
-bulk_create(
-    [
-        'ab_English',
-        'ab_French',
-        'ab_German',
-    ],
-    ['train', 'test', 'dev'],
-    handlers.MelSpectrogramFeature
-)
+_use_languages = [
+    # 'ab_English',
+    # 'ab_Russian',
+    # 'ab_German',
+    # 'khmer',
+    # 'nepali',
+    # 'sa_afrikaans',
+    # 'sa_isiXhosa',
+    # 'sa_sesotho',
+    # 'sa_setswana',
+]
 
-
-"""
-Done
-    'ab_Russian',
-    'ab_Portuguese',
-"""
-
-# [
-#     'ab_French',
-#     'ab_German',
-#     'ab_Hebrew',
-#     'chinese',
-#     'javanese',
-#     'khmer',
-# ],
+# bulk_create(_use_languages, ['train', 'test', 'dev'], handlers.MelSpectrogramFeature)
+# bulk_create(_use_languages, ['train', 'test', 'dev'], handlers.MFCCFeature)

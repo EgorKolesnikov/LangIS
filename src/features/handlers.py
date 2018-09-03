@@ -5,37 +5,18 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
-import traceback
+import matplotlib.image as mpimg
 
 from src import constants
+
+
+def rgb2gray(rgb):
+    return np.dot(rgb[..., :3], [0.299, 0.587, 0.114])
 
 
 class BaseFeatureHandler(object):
     UID = None
     EXTENSION = None
-
-    @classmethod
-    def wav_to_feature(cls, wav_path, save_path, **kwargs):
-        raise NotImplementedError('Needs to be overridden')
-
-    @classmethod
-    def load_feature(cls, feature_path, **kwargs):
-        raise NotImplementedError('Needs to be overridden')
-
-    @classmethod
-    def target_path(cls, language, dataset, filename):
-        return constants.FEATURE_LANGUAGES_PATH_TEMPLATE.format(
-            feature=cls.UID,
-            language=language,
-            dataset=dataset,
-            filename=filename,
-            extension=cls.EXTENSION
-        )
-
-
-class MelSpectrogramFeature(BaseFeatureHandler):
-    UID = 'spectrogram'
-    EXTENSION = '.png'
 
     @classmethod
     def _read_wav(cls, file_path):
@@ -65,12 +46,42 @@ class MelSpectrogramFeature(BaseFeatureHandler):
 
     @classmethod
     def wav_to_feature(cls, wav_path, save_path, **kwargs):
+        raise NotImplementedError('Needs to be overridden')
+
+    @classmethod
+    def load_feature(cls, feature_path, **kwargs):
+        raise NotImplementedError('Needs to be overridden')
+
+    @classmethod
+    def target_path(cls, language, dataset, filename):
+        return constants.FEATURE_LANGUAGES_PATH_TEMPLATE.format(
+            feature=cls.UID,
+            language=language,
+            dataset=dataset,
+            filename=filename,
+            extension=cls.EXTENSION
+        )
+
+
+class MelSpectrogramFeature(BaseFeatureHandler):
+    UID = 'spectrogram'
+    EXTENSION = '.png'
+
+    @classmethod
+    def wav_to_feature(cls, wav_path, save_path, winlen=15, winstep=25, n_mels=128, **kwargs):
         y, sr = cls._read_wav(wav_path)
 
-        winlen = int(0.015 * sr)
-        winstep = int(0.025 * sr)
+        # ms to number of samples
+        winlen = int((winlen / 1000.0) * sr)
+        winstep = int((winstep / 1000.0) * sr)
 
-        S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128, hop_length=winstep, n_fft=winlen)
+        S = librosa.feature.melspectrogram(
+            y=y, sr=sr,
+            hop_length=winstep,
+            n_fft=winlen,
+            n_mels=n_mels,
+        )
+
         log_S = librosa.power_to_db(S, ref=np.max)
 
         sizes = np.shape(log_S)
@@ -97,4 +108,70 @@ class MelSpectrogramFeature(BaseFeatureHandler):
 
     @classmethod
     def load_feature(cls, feature_path, **kwargs):
-        pass
+        img = mpimg.imread(feature_path)
+        return rgb2gray(img)
+
+
+class MFCCFeature(BaseFeatureHandler):
+    UID = 'mfcc'
+    EXTENSION = '.txt'
+
+    @classmethod
+    def wav_to_feature(
+            cls,
+            wav_path,
+            save_path,
+            winlen=15,
+            winstep=25,
+            n_mels=128,
+            n_mfcc=13,
+            need_d=False,
+            need_dd=False,
+            fmin=50,
+            fmax=8000,
+            **kwargs
+    ):
+        y, sr = cls._read_wav(wav_path)
+
+        # ms to number of samples
+        winlen = int((winlen / 1000.0) * sr)
+        winstep = int((winstep / 1000.0) * sr)
+
+        mfcc = librosa.feature.mfcc(
+            y=y,
+            sr=sr,
+            n_fft=winlen,
+            n_mfcc=n_mfcc,
+            n_mels=n_mels,
+            hop_length=winstep,
+            fmin=0,
+            fmax=8000
+        )
+
+        blocks = [mfcc]
+
+        if need_d:
+            d = librosa.feature.delta(mfcc)
+            blocks.append(d)
+        if need_dd:
+            dd = librosa.feature.delta(mfcc, order=2)
+            blocks.append(dd)
+
+        features = np.vstack(blocks)
+
+        save_path = u'{path}#{sr}={winlen}={winstep}={n_mfcc}={n_mels}={d}={dd}'.format(
+            path=save_path,
+            sr=sr,
+            winlen=winlen,
+            winstep=winstep,
+            n_mfcc=n_mfcc,
+            n_mels=n_mels,
+            d=int(need_d),
+            dd=int(need_dd)
+        )
+
+        np.savetxt(save_path, features, fmt='%.9e')
+
+    @classmethod
+    def load_feature(cls, feature_path, **kwargs):
+        return np.loadtxt(feature_path)
