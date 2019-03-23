@@ -93,7 +93,11 @@ _use_languages = [
     'ab_Danish',
     'ab_Hebrew',
     'ab_Finnish',
-    'ab_Poland',  # bad
+    'ab_Poland',
+    'ab_Danish',
+    'ab_Hebrew',
+    'ab_Finnish',
+    'ab_Poland',
     # 'khmer',
     # 'nepali',
     # 'sa_afrikaans',

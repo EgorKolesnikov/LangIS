@@ -95,7 +95,7 @@ function process_packs(){
         mkdir "$target_folder" -p
 
         echo "$i -> $target_folder"
-        process_language "$i" "${target_folder}"
+        process_language "$i" "${target_folder}" "$3" "$4" "$5"
     done
 }
 

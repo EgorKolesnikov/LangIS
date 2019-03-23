@@ -144,8 +144,8 @@ class MFCCFeature(BaseFeatureHandler):
             n_mfcc=n_mfcc,
             n_mels=n_mels,
             hop_length=winstep,
-            fmin=0,
-            fmax=8000
+            fmin=fmin,
+            fmax=fmax
         )
 
         blocks = [mfcc]
