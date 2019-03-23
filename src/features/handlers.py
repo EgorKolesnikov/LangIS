@@ -68,7 +68,7 @@ class MelSpectrogramFeature(BaseFeatureHandler):
     EXTENSION = '.png'
 
     @classmethod
-    def wav_to_feature(cls, wav_path, save_path, winlen=15, winstep=25, n_mels=128, **kwargs):
+    def wav_to_feature(cls, wav_path, save_path, winlen=25, winstep=15, n_mels=128, **kwargs):
         y, sr = cls._read_wav(wav_path)
 
         # ms to number of samples
@@ -121,14 +121,14 @@ class MFCCFeature(BaseFeatureHandler):
             cls,
             wav_path,
             save_path,
-            winlen=15,
-            winstep=25,
+            winlen=25,
+            winstep=15,
             n_mels=128,
             n_mfcc=13,
             need_d=False,
             need_dd=False,
-            fmin=50,
-            fmax=8000,
+            fmin=0,
+            fmax=6000,
             **kwargs
     ):
         y, sr = cls._read_wav(wav_path)
@@ -144,8 +144,8 @@ class MFCCFeature(BaseFeatureHandler):
             n_mfcc=n_mfcc,
             n_mels=n_mels,
             hop_length=winstep,
-            fmin=0,
-            fmax=8000
+            fmin=fmin,
+            fmax=fmax
         )
 
         blocks = [mfcc]

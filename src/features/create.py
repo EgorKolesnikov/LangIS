@@ -87,9 +87,10 @@ def bulk_create(languages, datasets, feature_handler, processes=4):
 
 
 _use_languages = [
-    # 'ab_English',
-    # 'ab_Russian',
-    # 'ab_German',
+    'ab_Danish',
+    'ab_Hebrew',
+    'ab_Finnish',
+    'ab_Poland',
     # 'khmer',
     # 'nepali',
     # 'sa_afrikaans',
@@ -98,5 +99,5 @@ _use_languages = [
     # 'sa_setswana',
 ]
 
-# bulk_create(_use_languages, ['train', 'test', 'dev'], handlers.MelSpectrogramFeature)
+bulk_create(_use_languages, ['train', 'test', 'dev'], handlers.MelSpectrogramFeature)
 # bulk_create(_use_languages, ['train', 'test', 'dev'], handlers.MFCCFeature)
