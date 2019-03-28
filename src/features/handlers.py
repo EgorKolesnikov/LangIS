@@ -125,8 +125,8 @@ class MFCCFeature(BaseFeatureHandler):
             winstep=15,
             n_mels=128,
             n_mfcc=13,
-            need_d=False,
-            need_dd=False,
+            need_d=True,
+            need_dd=True,
             fmin=0,
             fmax=6000,
             **kwargs

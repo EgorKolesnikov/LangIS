@@ -87,6 +87,13 @@ def bulk_create(languages, datasets, feature_handler, processes=4):
 
 
 _use_languages = [
+    'ab_English',
+    'ab_Russian',
+    'ab_German',
+    'ab_Danish',
+    'ab_Hebrew',
+    'ab_Finnish',
+    'ab_Poland',
     'ab_Danish',
     'ab_Hebrew',
     'ab_Finnish',
