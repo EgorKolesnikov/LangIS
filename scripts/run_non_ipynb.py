@@ -271,28 +271,25 @@ class DatasetGenerator(object):
         return self
 
 
-print 'Loading files list'
-LANGUAGES_FOLDER = '/home/kolegor/Study/Master/data/clean/'
-MAP_LANGUAGE_TO_FILES = defaultdict(list)
-ONLY_LANGUAGES = ['Chinese', 'Danish', 'English', 'Finnish', 'French', 'German', 'Russian', 'Portuguese', 'Italian']
-for dirname in os.listdir(LANGUAGES_FOLDER):
-    if not dirname.startswith('ab_'):
-        continue
-    if dirname[3:] not in ONLY_LANGUAGES:
-        continue
-    all_language_files = os.path.join(LANGUAGES_FOLDER, dirname, 'all')
-    for filename in os.listdir(all_language_files):
-        # if '#AUG' in filename:
-        #     continue
-        full_file_path = os.path.join(all_language_files, filename)
-        MAP_LANGUAGE_TO_FILES[dirname[3:]].append(full_file_path)
-print len(MAP_LANGUAGE_TO_FILES), sum(len(b) for a, b in MAP_LANGUAGE_TO_FILES.iteritems())
+def init_class_to_files_list(folder):
+	MAP_LANGUAGE_TO_FILES = defaultdict(list)
+	for dirname in os.listdir(folder):
+	    all_language_files = os.path.join(folder, dirname, 'all')
+	    for filename in os.listdir(all_language_files):
+	        full_file_path = os.path.join(all_language_files, filename)
+	        MAP_LANGUAGE_TO_FILES[dirname].append(full_file_path)
+
+	LANGUAGE_TO_CLASS = dict(zip(sorted(MAP_LANGUAGE_TO_FILES.keys()), range(len(ONLY_LANGUAGES))))
+	MAP_CLASS_TO_FILES_LIST = dict()
+	for l, f in MAP_LANGUAGE_TO_FILES.iteritems():
+	    MAP_CLASS_TO_FILES_LIST[LANGUAGE_TO_CLASS[l]] = f
+
+	return LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST
 
 
-LANGUAGE_TO_CLASS = dict(zip(sorted(MAP_LANGUAGE_TO_FILES.keys()), range(len(ONLY_LANGUAGES))))
-MAP_CLASS_TO_FILES_LIST = dict()
-for l, f in MAP_LANGUAGE_TO_FILES.iteritems():
-    MAP_CLASS_TO_FILES_LIST[LANGUAGE_TO_CLASS[l]] = f
+print 'Initializing class to files'
+LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST = init_class_to_files_list('')
+print len(MAP_CLASS_TO_FILES_LIST)
 
 
 print 'Initializing models'
