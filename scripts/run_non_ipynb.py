@@ -38,7 +38,8 @@ from sklearn.utils.multiclass import unique_labels
 import sklearn
 from sklearn import mixture
 import itertools
-
+import wave
+import contextlib
 
 
 
@@ -272,24 +273,48 @@ class DatasetGenerator(object):
 
 
 def init_class_to_files_list(folder):
-	MAP_LANGUAGE_TO_FILES = defaultdict(list)
-	for dirname in os.listdir(folder):
-	    all_language_files = os.path.join(folder, dirname, 'all')
-	    for filename in os.listdir(all_language_files):
-	        full_file_path = os.path.join(all_language_files, filename)
-	        MAP_LANGUAGE_TO_FILES[dirname].append(full_file_path)
+    MAP_LANGUAGE_TO_FILES = defaultdict(list)
+    for dirname in os.listdir(folder):
+        all_language_files = os.path.join(folder, dirname, 'all')
+        for filename in os.listdir(all_language_files):
+            full_file_path = os.path.join(all_language_files, filename)
+            MAP_LANGUAGE_TO_FILES[dirname].append(full_file_path)
 
-	LANGUAGE_TO_CLASS = dict(zip(sorted(MAP_LANGUAGE_TO_FILES.keys()), range(len(ONLY_LANGUAGES))))
-	MAP_CLASS_TO_FILES_LIST = dict()
-	for l, f in MAP_LANGUAGE_TO_FILES.iteritems():
-	    MAP_CLASS_TO_FILES_LIST[LANGUAGE_TO_CLASS[l]] = f
+    LANGUAGE_TO_CLASS = dict(zip(sorted(MAP_LANGUAGE_TO_FILES.keys()), range(len(ONLY_LANGUAGES))))
+    MAP_CLASS_TO_FILES_LIST = dict()
+    for l, f in MAP_LANGUAGE_TO_FILES.iteritems():
+        MAP_CLASS_TO_FILES_LIST[LANGUAGE_TO_CLASS[l]] = f
 
-	return LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST
+    return LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST
 
 
 print 'Initializing class to files'
 LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST = init_class_to_files_list('')
 print len(MAP_CLASS_TO_FILES_LIST)
+
+
+def _get_vectors_in_second():
+    # 171 in 3 seconds -> 57 in one second
+    return 57
+
+def _get_file_duration(file_path):
+    with contextlib.closing(wave.open(file_path,'r')) as f:
+        frames = f.getnframes()
+        rate = f.getframerate()
+        duration = frames / float(rate)
+        return duration
+
+def _get_files_list_total_duration(files_list, known_one_file_duration=None):
+    if known_one_file_duration is not None:
+        return known_one_file_duration * len(files_list)
+    return sum(map(_get_file_duration, files_list))
+
+def get_total_dataset_duration(class_to_files, known_one_file_duration=None):
+    result = 0.0
+    for c, files_list in class_to_files.iteritems():
+        print c, len(class_to_files)
+        result += _get_files_list_total_duration(files_list, known_one_file_duration=known_one_file_duration)
+    return result
 
 
 print 'Initializing models'
@@ -378,11 +403,10 @@ print 'Splitting data'
 train_gen_data, test_gen_data, val_gen_data = init_train_val_test_folders_iter(MAP_CLASS_TO_FILES_LIST)
 
 
-def estimate_total_dataset_duration(class_to_files_list):
-    total_files = sum(len(b) for a, b in class_to_files_list.iteritems())
-    average_file_duration = 11.0
-    vectors_per_file = 500
-    return total_files * vectors_per_file
+def estimate_total_dataset_duration(class_to_files_list, known_one_file_duration=None):
+    total_duration = get_total_dataset_duration(class_to_files_list, known_one_file_duration=known_one_file_duration)
+    vectors_in_second = _get_vectors_in_second()
+    return total_duration * vectors_in_second
 
 
 epochs = 4
