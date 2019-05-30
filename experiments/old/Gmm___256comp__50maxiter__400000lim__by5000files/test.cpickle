@@ -1,0 +1,12 @@
+defaultdict(<type 'int'>, {'Portuguese': 12, 'Chinese': 30, 'German': 14, 'Poland': 14, 'Spanish': 31, 'French': 581, 'Hebrew': 25, 'Russian': 10, 'English': 384, 'Italian': 60})
+defaultdict(<type 'int'>, {'Portuguese': 135, 'Chinese': 142, 'German': 404, 'Poland': 593, 'Spanish': 316, 'French': 1400, 'Hebrew': 755, 'Russian': 215, 'English': 2203, 'Italian': 359})
+Portuguese 0.0816326530612
+Chinese 0.174418604651
+German 0.0334928229665
+Poland 0.0230642504119
+Spanish 0.0893371757925
+French 0.293286219081
+Hebrew 0.0320512820513
+Russian 0.0444444444444
+English 0.148434480093
+Italian 0.143198090692
