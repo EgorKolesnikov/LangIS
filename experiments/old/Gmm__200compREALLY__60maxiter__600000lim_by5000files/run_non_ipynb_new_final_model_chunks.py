@@ -301,9 +301,13 @@ def init_class_to_files_list(folder):
 
 
 print 'Initializing class to files'
+<<<<<<< HEAD:experiments/old/Gmm__200compREALLY__60maxiter__600000lim_by5000files/run_non_ipynb_new_final_model_chunks.py
 LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST = init_class_to_files_list(
     '/home/kolegor/Study/Master/data/use2big_wav_big_splitted_5'
 )
+=======
+LANGUAGE_TO_CLASS, MAP_LANGUAGE_TO_FILES, MAP_CLASS_TO_FILES_LIST = init_class_to_files_list('/home/kolegor/Study/Master/data/use2big_wav_big_splitted_5')
+>>>>>>> d872de187a15a3525449f38aacd4ba14c300b015:scripts/run_non_ipynb.py
 print len(MAP_CLASS_TO_FILES_LIST)
 
 
@@ -331,6 +335,44 @@ def get_total_dataset_duration(class_to_files, known_one_file_duration=None):
     return result
 
 
+<<<<<<< HEAD:experiments/old/Gmm__200compREALLY__60maxiter__600000lim_by5000files/run_non_ipynb_new_final_model_chunks.py
+=======
+print 'Initializing models'
+### instantiate model
+# model = Sequential()
+
+# # we can think of this chunk as the input layer
+# model.add(Dense(200, input_dim=234, init='uniform'))
+# model.add(BatchNormalization())
+# model.add(Activation('relu'))
+
+# # we can think of this chunk as the hidden layer    
+# model.add(Dense(128, init='uniform'))
+# model.add(BatchNormalization())
+# model.add(Activation('relu'))
+# model.add(Dropout(0.25))
+
+# # we can think of this chunk as the hidden layer    
+# model.add(Dense(80, init='uniform'))
+# model.add(BatchNormalization())
+# model.add(Activation('relu'))
+
+# model.add(Dense(64, use_bias=False))
+# model.add(BatchNormalization())
+# model.add(Activation('relu'))
+
+# model.add(Dense(len(MAP_CLASS_TO_FILES_LIST)))
+# model.add(Activation('softmax'))
+# model.compile(loss=keras.losses.categorical_crossentropy,
+#               optimizer=keras.optimizers.RMSprop(lr=0.0005),
+#               metrics=['accuracy'])
+
+model = load_model('/home/kolegor/model.big_again_11_lang__reload_retrained_extra_2_epochs.keras')
+
+# model.summary()
+
+
+>>>>>>> d872de187a15a3525449f38aacd4ba14c300b015:scripts/run_non_ipynb.py
 def _split_language_files(files_list, train_size, test_size):
     count_by_file_id = defaultdict(int)
     for filename in files_list:
@@ -390,6 +432,7 @@ def estimate_total_dataset_duration(class_to_files_list, known_one_file_duration
     return total_duration * vectors_in_second
 
 
+<<<<<<< HEAD:experiments/old/Gmm__200compREALLY__60maxiter__600000lim_by5000files/run_non_ipynb_new_final_model_chunks.py
 def load_full_dataset(list_of_files, limit=None):
     result = []
     for i, file_path in enumerate(list_of_files):
@@ -406,8 +449,116 @@ def load_full_dataset(list_of_files, limit=None):
         if limit and len(result) >= limit:
             break
     return result
+=======
+if False:
+    epochs = 2
+    batch_size = len(train_gen_data) * 4
+    train_data_vectors = estimate_total_dataset_duration(train_gen_data, known_one_file_duration=5)
+    val_data_vectors = estimate_total_dataset_duration(val_gen_data, known_one_file_duration=5)
+    train_data_steps = train_data_vectors / batch_size
+    val_data_steps = val_data_vectors / batch_size
+    print train_data_vectors, train_data_steps
+    print val_data_vectors, val_data_steps
 
 
+    history = model.fit_generator(
+        DatasetGenerator(train_gen_data, batch_size),
+        validation_data=DatasetGenerator(val_gen_data, batch_size),
+        validation_steps=val_data_steps,
+        steps_per_epoch=train_data_steps,
+        epochs=epochs
+    )
+
+    model.save('/home/kolegor/model.big_again_11_lang__reload_retrained_extra_2_epochs.keras')
+else:
+
+    def _get_file_uid(file_path):
+        return file_path.split('.mp3')[0].split('/')[-1]
+
+    # tuples (file_path, real_class, predicted_class)
+    all_predictions = []
+    all_files_count = sum(len(b) for a, b in test_gen_data.iteritems())
+
+    i = 0
+    count_correct = 0
+    count_all = 0
+
+    for cl, files_paths in test_gen_data.iteritems():
+        for file_path in files_paths:
+            if i % 100 == 0:
+                print i, all_files_count
+            i += 1
+
+            try:
+                features = _generator_features_extractor(file_path)
+                cur_predictions = model.predict(features.T)
+
+                for column, p in zip(features.T, cur_predictions):
+                    pcl = np.argmax(p)
+                    count_all += 1
+                    if pcl == cl:
+                        count_correct += 1
+                    all_predictions.append((file_path, cl, list(p), pcl))
+            except KeyboardInterrupt:
+                break
+            except:
+                continue
+
+    print count_correct, count_all, float(count_correct) / count_all
+
+    try:
+        import json
+        with open('/home/kolegor/predictions1.json', 'w') as outf:
+            json.dump(all_predictions, outf)
+    except:
+        # print all_predictions
+        pass
+
+    print count_correct, count_all, float(count_correct) / count_all
+
+    # predictions_by_file_id = defaultdict(list)
+    # real_by_file_id = dict()
+    # classes = set()
+    # for x, file_id, pred, real in zip(all_test_X, all_test_X_file_uid, predictions, all_test_Y):
+    #     predictions_by_file_id[file_id].append(pred)
+    #     real_class = np.argmax(real)
+    #     if file_id in real_by_file_id and real_by_file_id[file_id] != real_class:
+    #         raise Exception('!!!')
+    #     real_by_file_id[file_id] = real_class
+    #     classes.add(MAP_CLASS_TO_LANGUAGE[real_class])
+
+    # confusion_matrix = np.zeros((len(classes), len(classes)))
+    # overall_count, overall_true = 0, 0
+    # for file_id, file_predictions in predictions_by_file_id.iteritems():
+    #     real_class = real_by_file_id[file_id]
+        
+    #     pred_class = None
+        
+    #     # 1 - Max sure over all vectors
+    #     if False:
+    #         _max_sure = -1
+    #         _max_sure_class = None
+    #         for p in file_predictions:
+    #             if max(p) > _max_sure:
+    #                 _max_sure = max(p)
+    #                 _max_sure_class = np.argmax(p)
+    #         pred_class = _max_sure_class
+        
+    #     # 2 - Max count over all vectors
+    #     else:
+    #         counter = Counter()
+    #         for p in file_predictions:
+    #             counter[np.argmax(p)] += 1
+    #         pred_class = counter.most_common(1)[0][0]
+        
+    #     overall_count += 1
+    #     if real_class == pred_class:
+    #         overall_true += 1
+>>>>>>> d872de187a15a3525449f38aacd4ba14c300b015:scripts/run_non_ipynb.py
+
+    #     confusion_matrix[real_class][pred_class] += 1
+
+<<<<<<< HEAD:experiments/old/Gmm__200compREALLY__60maxiter__600000lim_by5000files/run_non_ipynb_new_final_model_chunks.py
 
 #
 #   Model build
@@ -467,3 +618,8 @@ if __name__ == "__main__":
     else:
         pass
 
+=======
+    # print float(overall_true) / overall_count
+    # confusion_matrix = confusion_matrix.astype(int)
+    # print confusion_matrix
+>>>>>>> d872de187a15a3525449f38aacd4ba14c300b015:scripts/run_non_ipynb.py
